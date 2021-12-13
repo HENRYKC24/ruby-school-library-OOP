@@ -3,7 +3,7 @@ class Person
     @name = name
     @age = age
     @parent_permission = parent_permission
-    @id = Random.rand(1...1000000)
+    @id = Random.rand(1...1_000_000)
   end
 
   attr_accessor :name, :age
