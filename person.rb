@@ -14,7 +14,6 @@ class Person
     @rentals = []
   end
 
-
   def can_use_services
     is_of_age && @parent_permission
   end
@@ -25,7 +24,7 @@ class Person
 
   def rent_book(date, book)
     rental = Rental.new(date, book, self)
-    @rentals.push(rental) if !@rentals.include? rental
+    @rentals.push(rental) unless @rentals.include? rental
   end
 
   private
