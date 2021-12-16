@@ -1,15 +1,19 @@
 require 'corrector'
+require 'rental'
+
 class Person
+  attr_accessor :name, :age, :rentals
+  attr_reader :id, :parent_permission
+
   def initialize(age, name = 'Unknown', parent_permission: true)
     @name = name
     @age = age
     @parent_permission = parent_permission
     @id = Random.rand(1...1_000_000)
     @corrector = Corrector.new
+    @rentals = []
   end
 
-  attr_accessor :name, :age
-  attr_reader :id, :parent_permission
 
   def can_use_services
     is_of_age && @parent_permission
@@ -17,6 +21,11 @@ class Person
 
   def validate_name
     @name = @corrector.correct_name(@name)
+  end
+
+  def rent_book(date, book)
+    rental = Rental.new(date, book, self)
+    @rentals.push(rental) if !@rentals.include? rental
   end
 
   private
