@@ -5,7 +5,7 @@ require_relative './rental'
 require_relative './student'
 require_relative './teacher'
 
-class School
+class School_library_app
   def initialize
     @intro_text = [
       'Please choose an option by entering a number:',
@@ -80,7 +80,7 @@ class School
 
   def input_text_only
     choice = input_text
-    if !choice
+    if (choice == false)
       puts 'Please, at least first character should be a letter.'
     end
     choice
@@ -88,22 +88,17 @@ class School
 
   def parent_permission
     choice = gets.chomp
-    if ('yn'.include? choice.downcase) && (choice.length == 1)
-      choice.downcase
-    else
-      puts "Please, input either 'y' or 'n'"
-      parent_permission
-    end
+    return choice.downcase if ('yn'.include? choice.downcase) && (choice.length == 1)
+
+    puts "Please, input either 'y' or 'n'"
+    parent_permission
   end
 
   def input_text
     inputed_text = gets.chomp
-    if inputed_text == ''
-      return false
-    end
+    return false if inputed_text == ''
 
-    normal_first_char = inputed_text[0].index(/[A-z]/)
-    rnormal_first_char ? inputed_text.capitalize : false
+    inputed_text[0].index(/[A-z]/) ? inputed_text.capitalize : false
   end
 
   def create_person
@@ -116,9 +111,8 @@ class School
       print 'Name: '
       name = input_text_only
       print 'Has parent permission? [Y/N]: '
-      parent_permission = parent_permission
       permission = parent_permission == 'n'
-      student = Student.new(age, name, 'N/A')
+      student = Student.new(age, permission, name, 'N/A')
       @people.push(student)
       puts 'Person created successfully', ' '
       start
@@ -134,7 +128,7 @@ class School
       puts 'Person created successfully', ' '
       start
     else
-      puts 'Unknown entry'
+      puts 'Check your input, please'
     end
   end
 
@@ -221,4 +215,4 @@ class School
   end
 end
 
-School.new.main
+School_library_app.new.main
