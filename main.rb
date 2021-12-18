@@ -5,7 +5,7 @@ require_relative './rental'
 require_relative './student'
 require_relative './teacher'
 
-class SchoolLibraryApp
+class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
   def initialize
     @intro_text = [
       'Please choose an option by entering a number:',
@@ -33,7 +33,7 @@ class SchoolLibraryApp
     check_selected_option(selected_option)
   end
 
-  def check_selected_option(option)
+  def check_selected_option(option) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
     case option
     when '1'
       list_all_books
@@ -99,34 +99,42 @@ class SchoolLibraryApp
     inputed_text[0].index(/[A-z]/) ? inputed_text.capitalize : false
   end
 
+  def when_two
+    print 'Age: '
+    age = input_number_only(1, 150)
+    print 'Name: '
+    name = input_text_only
+    print 'Specialization: '
+    specialization = input_text_only
+    teacher = Teacher.new(age, specialization, name)
+    @people.push(teacher)
+    puts 'Person created successfully', ' '
+    sleep 2
+    start
+  end
+
+  def when_one
+    print 'Age: '
+    age = input_number_only(1, 150)
+    print 'Name: '
+    name = input_text_only
+    print 'Has parent permission? [Y/N]: '
+    permission = parent_permission == 'n'
+    student = Student.new(age, permission, name, 'N/A')
+    @people.push(student)
+    puts 'Person created successfully', ' '
+    sleep 2
+    start
+  end
+
   def create_person
     print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
     choice = input_number_only(1, 2)
     case choice
     when '1'
-      print 'Age: '
-      age = input_number_only(1, 150)
-      print 'Name: '
-      name = input_text_only
-      print 'Has parent permission? [Y/N]: '
-      permission = parent_permission == 'n'
-      student = Student.new(age, permission, name, 'N/A')
-      @people.push(student)
-      puts 'Person created successfully', ' '
-      sleep 2
-      start
+      when_one
     when '2'
-      print 'Age: '
-      age = input_number_only(1, 150)
-      print 'Name: '
-      name = input_text_only
-      print 'Specialization: '
-      specialization = input_text_only
-      teacher = Teacher.new(age, specialization, name)
-      @people.push(teacher)
-      puts 'Person created successfully', ' '
-      sleep 2
-      start
+      when_two
     else
       puts 'Check your input, please'
     end
@@ -159,7 +167,7 @@ class SchoolLibraryApp
     start
   end
 
-  def create_rental
+  def create_rental # rubocop:disable Metrics/MethodLength
     if @books.empty?
       puts 'No books created yet for rental', ' '
     elsif !@books.empty? && @people.empty?
