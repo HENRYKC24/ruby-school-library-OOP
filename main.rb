@@ -5,7 +5,7 @@ require_relative './rental'
 require_relative './student'
 require_relative './teacher'
 
-class School_library_app
+class School
   def initialize
     @intro_text = [
       'Please choose an option by entering a number:',
@@ -221,4 +221,4 @@ class School_library_app
   end
 end
 
-School_library_app.new.main
+School.new.main
