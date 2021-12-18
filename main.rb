@@ -5,7 +5,7 @@ require_relative './rental'
 require_relative './student'
 require_relative './teacher'
 
-class School_library_app
+class SchoolLibraryApp
   def initialize
     @intro_text = [
       'Please choose an option by entering a number:',
@@ -23,6 +23,7 @@ class School_library_app
 
   def main
     puts ' ', ' ', 'Welcome to School Library App!', ' '
+    sleep 2
     start
   end
 
@@ -59,19 +60,17 @@ class School_library_app
   def input_number
     choice = gets.chomp
     choice_check = choice.scan(/\D/).empty?
-    if (choice_check)
-      return choice
-    end
+    return choice if choice_check
 
     false
   end
 
   def input_number_only(min, max)
     choice = input_number
-    if (choice == false)
+    if choice == false
       print 'Please, input only numbers: '
       choice = input_number_only(min, max)
-    elsif (choice.to_i < min || choice.to_i > max)
+    elsif choice.to_i < min || choice.to_i > max
       print "Please, input number from #{min} to #{max}: "
       choice = input_number_only(min, max)
     end
@@ -80,9 +79,8 @@ class School_library_app
 
   def input_text_only
     choice = input_text
-    if (choice == false)
-      puts 'Please, at least first character should be a letter.'
-    end
+    puts 'Please, at least first character should be a letter.' if choice == false
+
     choice
   end
 
@@ -115,6 +113,7 @@ class School_library_app
       student = Student.new(age, permission, name, 'N/A')
       @people.push(student)
       puts 'Person created successfully', ' '
+      sleep 2
       start
     when '2'
       print 'Age: '
@@ -126,6 +125,7 @@ class School_library_app
       teacher = Teacher.new(age, specialization, name)
       @people.push(teacher)
       puts 'Person created successfully', ' '
+      sleep 2
       start
     else
       puts 'Check your input, please'
@@ -142,6 +142,7 @@ class School_library_app
     book = Book.new(title, author)
     @books.push(book)
     puts 'Book created successfully', ' '
+    sleep 2
     start
   end
 
@@ -154,6 +155,7 @@ class School_library_app
       end
       puts ' '
     end
+    sleep 2
     start
   end
 
@@ -180,6 +182,7 @@ class School_library_app
       Rental.new(date_chosen, selected_book, selected_person)
       puts 'Rental created successfully', ' '
     end
+    sleep 2
     start
   end
 
@@ -192,6 +195,7 @@ class School_library_app
       end
       puts ' '
     end
+    sleep 2
     start
   end
 
@@ -211,8 +215,9 @@ class School_library_app
       puts mapped_person
     end
     puts ' '
+    sleep 2
     start
   end
 end
 
-School_library_app.new.main
+SchoolLibraryApp.new.main
