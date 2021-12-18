@@ -80,7 +80,8 @@ class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
   def input_text_only
     choice = input_text
     puts 'Please, at least first character should be a letter.' if choice == false
-
+    choice = input_text_only unless choice == false
+    # binding.pry
     choice
   end
 
@@ -156,7 +157,7 @@ class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
 
   def list_all_books
     if @books.empty?
-      puts 'Empty', ' '
+      puts 'There are no books created yet', ' '
     else
       @books.each do |book|
         puts "Titile: \"#{book.title}\", Author: #{book.author}"
