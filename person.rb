@@ -1,9 +1,9 @@
-require 'corrector'
-require 'rental'
+require './corrector'
+require './rental'
 
 class Person
   attr_accessor :name, :age, :rentals
-  attr_reader :id, :parent_permission
+  attr_reader :id
 
   def initialize(age, name = 'Unknown', parent_permission: true)
     @name = name
