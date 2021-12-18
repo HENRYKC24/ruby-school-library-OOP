@@ -68,7 +68,7 @@ class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
   def input_number_only(min, max)
     choice = input_number
     if choice == false
-      print 'Please, input only numbers: '
+      print 'Please, input only whole numbers: '
       choice = input_number_only(min, max)
     elsif choice.to_i < min || choice.to_i > max
       print "Please, input number from #{min} to #{max}: "
@@ -80,8 +80,8 @@ class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
   def input_text_only
     choice = input_text
     puts 'Please, at least first character should be a letter.' if choice == false
-    choice = input_text_only unless choice == false
-    # binding.pry
+    choice = input_text_only if choice == false
+
     choice
   end
 
