@@ -14,6 +14,7 @@ To get a local copy up and running run the codes below in your terminal.
 
 - `clone https://github.com/HENRYKC24/ruby-school-library-OOP.git`
 - `cd ruby-school-library-OOP`
+- `ruby main.rb`
 
 ## Author
 
