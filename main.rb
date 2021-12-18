@@ -1,7 +1,7 @@
 require_relative './book'
 require_relative './classroom'
 require_relative './person'
-require_relative './rental.rb'
+require_relative './rental'
 require_relative './student'
 require_relative './teacher'
 
@@ -23,7 +23,7 @@ class School_library_app
 
   def main
     puts ' ', ' ', 'Welcome to School Library App!', ' '
-    self.start
+    start
   end
 
   def start
@@ -35,24 +35,24 @@ class School_library_app
   def check_selected_option(option)
     case option
     when '1'
-      self.list_all_books
+      list_all_books
     when '2'
-      self.list_all_people
+      list_all_people
     when '3'
-      self.create_person
+      create_person
     when '4'
-      self.create_book
+      create_book
     when '5'
-      self.create_rental
+      create_rental
     when '6'
-      self.list_all_rentals
+      list_all_rentals
     when '7'
       puts 'Thank you for using this app!', ' '
       exit
     else
       print 'Please input an option from the numbers listed above: '
       selected_option = gets.chomp
-      self.check_selected_option(selected_option)
+      check_selected_option(selected_option)
     end
   end
 
@@ -67,89 +67,92 @@ class School_library_app
   end
 
   def input_number_only(min, max)
-    choice = self.input_number
+    choice = input_number
     if (choice == false)
       print 'Please, input only numbers: '
-      choice = self.input_number_only(min, max)
+      choice = input_number_only(min, max)
     elsif (choice.to_i < min || choice.to_i > max)
       print "Please, input number from #{min} to #{max}: "
-      choice = self.input_number_only(min, max)
+      choice = input_number_only(min, max)
     end
     choice
   end
 
   def input_text_only
-    choice = self.input_text
-    if (choice == false)
+    choice = input_text
+    if !choice
       puts 'Please, at least first character should be a letter.'
     end
     choice
   end
 
-  def has_parent_permission
+  def parent_permission
     choice = gets.chomp
-    if (('yn'.include? choice.downcase) && (choice.length == 1))
-      return choice.downcase
+    if ('yn'.include? choice.downcase) && (choice.length == 1)
+      choice.downcase
     else
       puts "Please, input either 'y' or 'n'"
-      self.has_parent_permission
+      parent_permission
     end
   end
 
   def input_text
     inputed_text = gets.chomp
-    if (inputed_text == '')
+    if inputed_text == ''
       return false
     end
 
     normal_first_char = inputed_text[0].index(/[A-z]/)
-    return normal_first_char ? inputed_text.capitalize : false
+    rnormal_first_char ? inputed_text.capitalize : false
   end
 
   def create_person
     print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
-    choice = self.input_number_only(1, 2)
-    if (choice == '1')
+    choice = input_number_only(1, 2)
+    case choice
+    when '1'
       print 'Age: '
-      age = self.input_number_only(1, 150)
+      age = input_number_only(1, 150)
       print 'Name: '
-      name = self.input_text_only
+      name = input_text_only
       print 'Has parent permission? [Y/N]: '
-      parent_permission = self.has_parent_permission
-      permission = parent_permission == 'n' ? false : true
+      parent_permission = parent_permission
+      permission = parent_permission == 'n'
       student = Student.new(age, name, 'N/A')
       @people.push(student)
       puts 'Person created successfully', ' '
-      self.start
-    elsif (choice == '2')
+      start
+    when '2'
       print 'Age: '
-      age = self.input_number_only(1, 150)
+      age = input_number_only(1, 150)
       print 'Name: '
-      name = self.input_text_only
+      name = input_text_only
       print 'Specialization: '
-      specialization = self.input_text_only
+      specialization = input_text_only
       teacher = Teacher.new(age, specialization, name)
       @people.push(teacher)
       puts 'Person created successfully', ' '
-      self.start
+      start
+    else
+      puts 'Unknown entry'
     end
   end
 
   def create_book
     print 'Title: '
-    title = self.input_text_only
+    title = input_text_only
 
     print 'Author: '
-    author = self.input_text_only
+    author = input_text_only
 
     book = Book.new(title, author)
     @books.push(book)
     puts 'Book created successfully', ' '
-    self.start
+    start
   end
 
   def list_all_books
-    if (@books.length == 0)
+    if @books.empty?
       puts 'Empty', ' '
     else
       @books.each do |book|
@@ -157,37 +160,37 @@ class School_library_app
       end
       puts ' '
     end
-    self.start
+    start
   end
 
   def create_rental
-    if (@books.length == 0)
+    if @books.empty?
       puts 'No books created yet for rental', ' '
-    elsif (@books.length > 0 && @people.length == 0)
+    elsif !@books.empty? && @people.empty?
       puts 'There are books but no person created yet', ' '
     else
       puts ' ', 'Select a book from the following list by number'
       @books.each_with_index do |book, index|
         puts "#{index + 1}) Titile: \"#{book.title}\", Author: #{book.author}"
       end
-      selected_num = self.input_number_only(1, @books.length)
+      selected_num = input_number_only(1, @books.length)
       selected_book = @books[selected_num.to_i - 1]
       puts ' ', 'Select a person from the following list by number (Not ID)'
       @people.each_with_index do |person, index|
         puts "#{index + 1}) [#{person.class.name}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
       end
-      selected_num2 = self.input_number_only(1, @people.length)
+      selected_num2 = input_number_only(1, @people.length)
       selected_person = @people[selected_num2.to_i - 1]
       print 'Date: '
       date_chosen = gets.chomp
-      Rental.new(date_chosen, selected_book, selected_person);
+      Rental.new(date_chosen, selected_book, selected_person)
       puts 'Rental created successfully', ' '
     end
-    self.start
+    start
   end
 
   def list_all_people
-    if (@people.length == 0)
+    if @people.empty?
       puts 'No person created yet', ' '
     else
       @people.each do |person|
@@ -195,22 +198,26 @@ class School_library_app
       end
       puts ' '
     end
-    self.start
+    start
   end
 
   def list_all_rentals
     puts 'ID of person: '
-    given_id = self.input_number_only(1, 1_000_000)
+    given_id = input_number_only(1, 1_000_000)
     selected_person_array = @people.filter { |person| person.id == given_id.to_i }
-    if (selected_person_array.length == 0)
+    if selected_person_array.empty?
       puts "There is no person with the ID: \"#{given_id}\" ", ' '
-    elsif (selected_person_array[0].rentals.length == 0)
+    elsif selected_person_array[0].rentals.empty?
       puts "The person with the ID \"#{given_id}\" has no rentals", ' '
     else
-      puts selected_person_array[0].rentals.map { |rental| "Book: #{rental.book.title}, Rented on: #{rental.date}" }
+      person = selected_person_array[0].rentals
+      mapped_person = person.map do |rental|
+        "Book: #{rental.book.title}, Rented on: #{rental.date}"
+      end
+      puts mapped_person
     end
     puts ' '
-    self.start
+    start
   end
 end
 

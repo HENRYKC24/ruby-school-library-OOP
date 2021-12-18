@@ -1,4 +1,4 @@
-require './corrector.rb'
+require './corrector'
 require './rental'
 
 class Person
