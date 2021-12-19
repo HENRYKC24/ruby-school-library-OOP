@@ -19,6 +19,7 @@ class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
     ]
     @books = []
     @people = []
+    @rentals = []
   end
 
   def main
@@ -97,7 +98,7 @@ class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
     inputed_text = gets.chomp
     return false if inputed_text == ''
 
-    inputed_text[0].index(/[A-z]/) ? inputed_text.capitalize : false
+    inputed_text[0].index(/[A-z]/) ? inputed_text.split.map(&:capitalize).join(' ') : false
   end
 
   def when_two
@@ -188,7 +189,8 @@ class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
       selected_person = @people[selected_num2.to_i - 1]
       print 'Date: '
       date_chosen = gets.chomp
-      Rental.new(date_chosen, selected_book, selected_person)
+      rental = Rental.new(date_chosen, selected_book, selected_person)
+      @rentals << rental
       puts 'Rental created successfully', ' '
     end
     sleep 2
@@ -208,20 +210,28 @@ class SchoolLibraryApp # rubocop:disable Metrics/ClassLength
     start
   end
 
-  def list_all_rentals
-    puts 'ID of person: '
-    given_id = input_number_only(1, 1_000_000)
-    selected_person_array = @people.filter { |person| person.id == given_id.to_i }
-    if selected_person_array.empty?
-      puts "There is no person with the ID: \"#{given_id}\" ", ' '
-    elsif selected_person_array[0].rentals.empty?
-      puts "The person with the ID \"#{given_id}\" has no rentals", ' '
+  def list_all_rentals # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+    if @books.empty?
+      puts 'No books created yet for rental', ' '
+    elsif !@books.empty? && @people.empty?
+      puts 'There are books but no person created yet', ' '
+    elsif @rentals.empty?
+      puts 'Book and Person exist by no one has rented any book yet.'
     else
-      person = selected_person_array[0].rentals
-      mapped_person = person.map do |rental|
-        "Book: #{rental.book.title}, Rented on: #{rental.date}"
+      puts 'ID of person: '
+      given_id = input_number_only(1, 1_000_000)
+      selected_person_array = @people.filter { |person| person.id == given_id.to_i }
+      if selected_person_array.empty?
+        puts "There is no person with the ID: \"#{given_id}\" ", ' '
+      elsif selected_person_array[0].rentals.empty?
+        puts "The person with the ID \"#{given_id}\" has no rentals", ' '
+      else
+        person = selected_person_array[0].rentals
+        mapped_person = person.map do |rental|
+          "Book: #{rental.book.title}, Rented on: #{rental.date}"
+        end
+        puts mapped_person
       end
-      puts mapped_person
     end
     puts ' '
     sleep 2
